@@ -10,7 +10,8 @@ LINK PARA VISUALIZAÇÃO DO SISTEMA: https://web-production-4c8fb.up.railway.app
               Luan Souza
               Robson Roberto
               Vitor Hugo
-Sistema web para gestão de estoque de farmácia, com cadastro de produtos, fornecedores, controle de movimentações (entrada/saída) e consulta de estoque em tempo real.
+              
+## Sistema web para gestão de estoque de farmácia, com cadastro de produtos, fornecedores, controle de movimentações (entrada/saída) e consulta de estoque em tempo real.
 
 ## Tecnologias
 
