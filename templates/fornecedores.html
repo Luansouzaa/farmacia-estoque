@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Fornecedores{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Fornecedores</h1>
+    <p>Gerencie os fornecedores cadastrados</p>
+</div>
+
+<div class="toolbar">
+    <form class="search-form" method="get">
+        <input type="text" name="busca" placeholder="Buscar por nome ou CNPJ..." value="{{ busca }}">
+        <button type="submit" class="btn btn-secondary">Buscar</button>
+    </form>
+    <a href="{{ url_for('fornecedor_novo') }}" class="btn btn-primary">+ Novo Fornecedor</a>
+</div>
+
+<div class="panel">
+    {% if fornecedores %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in fornecedores %}
+            <tr>
+                <td>{{ f.nome }}</td>
+                <td>{{ f.cnpj or '-' }}</td>
+                <td>{{ f.telefone or '-' }}</td>
+                <td>{{ f.email or '-' }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('fornecedor_editar', id=f.id) }}" class="btn-icon" title="Editar">✏️</a>
+                    <form method="post" action="{{ url_for('fornecedor_excluir', id=f.id) }}" class="inline-form" data-confirm="Deseja realmente excluir este fornecedor?">
+                        <button type="submit" class="btn-icon" title="Excluir">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">Nenhum fornecedor encontrado.</p>
+    {% endif %}
+</div>
+{% endblock %}

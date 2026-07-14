@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Produtos</h1>
+    <p>Gerencie o cadastro de produtos da farmácia</p>
+</div>
+
+<div class="toolbar">
+    <form class="search-form" method="get">
+        <input type="text" name="busca" placeholder="Buscar por nome ou categoria..." value="{{ busca }}">
+        <button type="submit" class="btn btn-secondary">Buscar</button>
+    </form>
+    <a href="{{ url_for('produto_novo') }}" class="btn btn-primary">+ Novo Produto</a>
+</div>
+
+<div class="panel">
+    {% if produtos %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Fornecedor</th>
+                <th>Estoque</th>
+                <th>Preço Venda</th>
+                <th>Validade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in produtos %}
+            <tr>
+                <td>{{ p.nome }}</td>
+                <td>{{ p.categoria or '-' }}</td>
+                <td>{{ p.fornecedor_nome or '-' }}</td>
+                <td>
+                    <span class="{{ 'text-danger' if p.quantidade_estoque <= p.quantidade_minima else '' }}">
+                        {{ p.quantidade_estoque }} {{ p.unidade_medida }}
+                    </span>
+                    {% if p.quantidade_estoque <= p.quantidade_minima %}
+                        <span class="badge badge-warning">baixo</span>
+                    {% endif %}
+                </td>
+                <td>R$ {{ '%.2f'|format(p.preco_venda) }}</td>
+                <td>{{ p.data_validade.strftime('%d/%m/%Y') if p.data_validade else '-' }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('produto_editar', id=p.id) }}" class="btn-icon" title="Editar">✏️</a>
+                    <form method="post" action="{{ url_for('produto_excluir', id=p.id) }}" class="inline-form" data-confirm="Deseja realmente excluir este produto?">
+                        <button type="submit" class="btn-icon" title="Excluir">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">Nenhum produto encontrado.</p>
+    {% endif %}
+</div>
+{% endblock %}

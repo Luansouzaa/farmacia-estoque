@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Dashboard</h1>
+    <p>Visão geral do estoque da farmácia</p>
+</div>
+
+<div class="cards-grid">
+    <div class="stat-card">
+        <span class="stat-icon">💊</span>
+        <div>
+            <span class="stat-value">{{ total_produtos }}</span>
+            <span class="stat-label">Produtos ativos</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <span class="stat-icon">🚚</span>
+        <div>
+            <span class="stat-value">{{ total_fornecedores }}</span>
+            <span class="stat-label">Fornecedores</span>
+        </div>
+    </div>
+    <div class="stat-card {{ 'stat-warning' if total_estoque_baixo > 0 }}">
+        <span class="stat-icon">⚠️</span>
+        <div>
+            <span class="stat-value">{{ total_estoque_baixo }}</span>
+            <span class="stat-label">Itens com estoque baixo</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <span class="stat-icon">💰</span>
+        <div>
+            <span class="stat-value">R$ {{ '%.2f'|format(valor_estoque) }}</span>
+            <span class="stat-label">Valor total em estoque</span>
+        </div>
+    </div>
+</div>
+
+<div class="two-columns">
+    <div class="panel">
+        <h2>Últimas movimentações</h2>
+        {% if ultimas_movimentacoes %}
+        <table class="table">
+            <thead>
+                <tr><th>Produto</th><th>Tipo</th><th>Qtd.</th><th>Data</th></tr>
+            </thead>
+            <tbody>
+                {% for m in ultimas_movimentacoes %}
+                <tr>
+                    <td>{{ m.produto_nome }}</td>
+                    <td><span class="badge badge-{{ m.tipo }}">{{ 'Entrada' if m.tipo == 'entrada' else 'Saída' }}</span></td>
+                    <td>{{ m.quantidade }}</td>
+                    <td>{{ m.data_movimentacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Nenhuma movimentação registrada ainda.</p>
+        {% endif %}
+    </div>
+
+    <div class="panel">
+        <h2>Produtos com estoque crítico</h2>
+        {% if produtos_criticos %}
+        <table class="table">
+            <thead>
+                <tr><th>Produto</th><th>Atual</th><th>Mínimo</th></tr>
+            </thead>
+            <tbody>
+                {% for p in produtos_criticos %}
+                <tr>
+                    <td>{{ p.nome }}</td>
+                    <td><strong class="text-danger">{{ p.quantidade_estoque }}</strong></td>
+                    <td>{{ p.quantidade_minima }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Nenhum produto com estoque crítico. 🎉</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

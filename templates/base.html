@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Estoque{% endblock %} | Farmácia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-icon">➕</span>
+                <span class="brand-text">Farmácia<strong>Stock</strong></span>
+            </div>
+            <nav class="nav">
+                <a href="{{ url_for('index') }}" class="nav-link {{ 'active' if request.path == '/' }}">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="{{ url_for('produtos') }}" class="nav-link {{ 'active' if '/produtos' in request.path }}">
+                    <span class="nav-icon">💊</span> Produtos
+                </a>
+                <a href="{{ url_for('fornecedores') }}" class="nav-link {{ 'active' if '/fornecedores' in request.path }}">
+                    <span class="nav-icon">🚚</span> Fornecedores
+                </a>
+                <a href="{{ url_for('movimentacoes') }}" class="nav-link {{ 'active' if '/movimentacoes' in request.path }}">
+                    <span class="nav-icon">🔁</span> Movimentações
+                </a>
+                <a href="{{ url_for('estoque') }}" class="nav-link {{ 'active' if '/estoque' in request.path }}">
+                    <span class="nav-icon">📦</span> Consultar Estoque
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div id="toast-container"></div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-wrapper">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}" data-autohide>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

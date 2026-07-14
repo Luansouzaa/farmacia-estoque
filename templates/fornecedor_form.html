@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if fornecedor else 'Novo' }} Fornecedor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'Editar Fornecedor' if fornecedor else 'Novo Fornecedor' }}</h1>
+    <p>Preencha os dados do fornecedor</p>
+</div>
+
+<div class="panel form-panel">
+    <form method="post">
+        <div class="form-grid">
+            <div class="form-group span-2">
+                <label for="nome">Nome / Razão Social *</label>
+                <input type="text" id="nome" name="nome" required value="{{ fornecedor.nome if fornecedor else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="cnpj">CNPJ</label>
+                <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" value="{{ fornecedor.cnpj if fornecedor else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" placeholder="(31) 90000-0000" value="{{ fornecedor.telefone if fornecedor else '' }}">
+            </div>
+
+            <div class="form-group span-2">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="{{ fornecedor.email if fornecedor else '' }}">
+            </div>
+
+            <div class="form-group span-2">
+                <label for="endereco">Endereço</label>
+                <input type="text" id="endereco" name="endereco" value="{{ fornecedor.endereco if fornecedor else '' }}">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('fornecedores') }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

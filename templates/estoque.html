@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Consultar Estoque{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Consulta de Estoque</h1>
+    <p>Veja a disponibilidade atual de todos os produtos</p>
+</div>
+
+<div class="toolbar">
+    <form class="search-form" method="get">
+        <input type="text" name="busca" placeholder="Buscar por nome ou categoria..." value="{{ busca }}">
+        <select name="filtro">
+            <option value="">Todos os produtos</option>
+            <option value="baixo" {{ 'selected' if filtro == 'baixo' }}>Apenas estoque baixo</option>
+        </select>
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+    </form>
+</div>
+
+<div class="panel">
+    {% if produtos %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Fornecedor</th>
+                <th>Estoque Atual</th>
+                <th>Mínimo</th>
+                <th>Situação</th>
+                <th>Validade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in produtos %}
+            <tr>
+                <td>{{ p.nome }}</td>
+                <td>{{ p.categoria or '-' }}</td>
+                <td>{{ p.fornecedor_nome or '-' }}</td>
+                <td><strong>{{ p.quantidade_estoque }} {{ p.unidade_medida }}</strong></td>
+                <td>{{ p.quantidade_minima }}</td>
+                <td>
+                    {% if p.quantidade_estoque <= 0 %}
+                        <span class="badge badge-danger">Esgotado</span>
+                    {% elif p.quantidade_estoque <= p.quantidade_minima %}
+                        <span class="badge badge-warning">Estoque baixo</span>
+                    {% else %}
+                        <span class="badge badge-success">Normal</span>
+                    {% endif %}
+                </td>
+                <td>{{ p.data_validade.strftime('%d/%m/%Y') if p.data_validade else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">Nenhum produto encontrado.</p>
+    {% endif %}
+</div>
+{% endblock %}
